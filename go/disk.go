@@ -98,7 +98,7 @@ func NewDisk(spec string, size int) (Disk, error) {
 func exists(d Disk) bool {
 	_, err := os.Stat(d.GetPath())
 	if err != nil && !os.IsNotExist(err) {
-		log.Debugf("cannot stat %q: %v", d.GetPath(), err)
+		log.Debugf("cannot stat %q: %v", d, err)
 	}
 	return err == nil
 }
@@ -376,7 +376,7 @@ func (d *QcowDisk) check(lockFile *os.File) error {
 // Stop cleans up this disk when we are quitting.
 func (d *QcowDisk) Stop(lockFile *os.File) error {
 	if !d.Trim && d.CompactAfter == 0 {
-		log.Infof("TRIM is enabled but auto-compaction disabled: compacting now")
+		log.Infof("TRIM is enabled but auto-compaction disabled: compacting %q now", d)
 		if err := d.compact(lockFile); err != nil {
 			return fmt.Errorf("Failed to compact %q: %v", d, err)
 		}
